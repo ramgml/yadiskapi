@@ -1,0 +1,6 @@
+venv/
+.idea/
+settings
+__pycache__/
+resp.html
+settings.py
