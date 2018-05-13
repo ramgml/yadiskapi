@@ -27,19 +27,21 @@ class Disk(object):
 
     def get_resources_metainfo(self, path):
         """Возвращает мета-информацию о ресурсе"""
-        response = requests.get(url='{}disk/resources'.format(self.api_url), params={'path': path}, headers=self.headers)
+        response = requests.get(url='{}disk/resources'.format(self.api_url), params={'path': path},
+                                headers=self.headers)
         if response.status_code != 200:
             raise DiskException(response.json())
         return response.json()
 
     def create_dir(self, path):
         """Создает папку"""
-        response =requests.put(url='{}disk/resources'.format(self.api_url), params={'path': path}, headers=self.headers)
+        response = requests.put(url='{}disk/resources'.format(self.api_url), params={'path': path},
+                                headers=self.headers)
         if response.status_code != 201:
             raise DiskException(response.json())
         return response.json()
 
-    def delete_dir(self, path):
+    def delete_resources(self, path):
         """Удаляет папку"""
         response = requests.delete(url='{}disk/resources'.format(self.api_url), params={'path': path},
                                    headers=self.headers)
@@ -51,7 +53,7 @@ class Disk(object):
         """Изменяет метаинформацию о ресурсе
         custom_properties - словарь, где ключ - имя поля в виде строки"""
         response = requests.patch(url='{}disk/resources'.format(self.api_url),
-                                 params={'path': path,'custom_properties': custom_properties}, headers=self.headers)
+                                  params={'path': path, 'custom_properties': custom_properties}, headers=self.headers)
         if response.status_code != 200:
             raise DiskException(response.json())
         return response.json()
@@ -69,14 +71,14 @@ class Disk(object):
     def download(self, path):
         """Возвращает ссылку на скачивание файла или папки"""
         response = requests.get(url='{}disk/resources/download'.format(self.api_url),
-                                params={'path': path}, headers= self.headers)
+                                params={'path': path}, headers=self.headers)
         if response.status_code != 200:
             raise DiskException(response.json())
         return response.json()
 
-    def get_files(self, media_type, offset, preview_size, sort, limit=20, preview_crop=False):
+    def get_files(self, media_type, preview_size, sort, limit=20, preview_crop=False, offset=0):
         """Возвращает список файлов
-        media_type принимает следующие значения
+        media_type принимает следующие значения:
             audio — аудио-файлы.
             backup — файлы резервных и временных копий.
             book — электронные книги.
@@ -110,7 +112,54 @@ class Disk(object):
         response = requests.get(url='{}disk/resources/files'.format(self.api_url),
                                 params={'media_type': media_type, 'offset': offset, 'preview_size': preview_size,
                                         'sort': sort, 'limit': limit, 'preview_crop': preview_crop},
-                                headers= self.headers)
+                                headers=self.headers)
+        if response.status_code != 200:
+            raise DiskException(response.json())
+        return response.json()
+
+    def move(self, from_resource, path_to_copy, force_async=False, owerwrite=False):
+        """Перемещает ресурс по указанному пути"""
+        response = requests.post(url='{}disk/resources/move'.format(self.api_url),
+                                 params={'from': from_resource, 'path': path_to_copy, 'force_async': force_async,
+                                         'owerwrite': owerwrite},
+                                 headers=self.headers)
+        if response.status_code not in [201, 202]:
+            raise DiskException(response.json())
+        return response.json()
+
+    def get_public_resources(self, resources_type, preview_size, offset=0, limit=20, preview_crop=False, ):
+        """Возвращает список опубликованных ресурсов
+        resources_type принимает следующие значения:
+            file
+            dir"""
+        response = requests.get(url='{}disk/resources/public'.format(self.api_url),
+                                params={'offset': offset,'preview_size': preview_size,
+                                        'limit': limit, 'preview_crop': preview_crop, 'type': resources_type},
+                                headers=self.headers)
+        if response.status_code != 200:
+            raise DiskException(response.json())
+        return response.json()
+
+    def publish_resources(self, path):
+        """Опубликовать ресурс"""
+        response = requests.put(url='{}disk/resources/publish'.format(self.api_url), params={'path': path},
+                                headers=self.headers)
+        if response.status_code != 200:
+            raise DiskException(response.json())
+        return response.json()
+
+    def unpublish_resources(self, path):
+        """Отменить публикацию ресурса"""
+        response = requests.put(url='{}disk/resources/unpublish'.format(self.api_url), params={'path': path},
+                                headers=self.headers)
+        if response.status_code != 200:
+            raise DiskException(response.json())
+        return response.json()
+
+    def upload(self, path):
+        """Получить ссылку для загрузки файла"""
+        response = requests.get(url='{}disk/resources/upload'.format(self.api_url), params={'path': path},
+                                headers=self.headers)
         if response.status_code != 200:
             raise DiskException(response.json())
         return response.json()
@@ -118,5 +167,3 @@ class Disk(object):
 if __name__ == '__main__':
     disk = Disk(token=TOKEN)
     print(disk.get_info())
-
-
