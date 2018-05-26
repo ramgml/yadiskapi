@@ -4,3 +4,5 @@ settings
 __pycache__/
 resp.html
 settings.py
+dist/
+yadiskapi.egg-info/
