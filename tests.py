@@ -1,6 +1,6 @@
 from unittest import main, TestCase
 from settings import TOKEN
-from yadiskapi import Disk, DiskException
+from yadiskapi.yadiskapi import Disk, DiskException
 from contextlib import contextmanager
 from collections import OrderedDict
 

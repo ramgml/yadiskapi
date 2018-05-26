@@ -1,4 +1,3 @@
-from settings import TOKEN
 import requests
 
 
@@ -133,7 +132,7 @@ class Disk(object):
             file
             dir"""
         response = requests.get(url='{}disk/resources/public'.format(self.api_url),
-                                params={'offset': offset,'preview_size': preview_size,
+                                params={'offset': offset, 'preview_size': preview_size,
                                         'limit': limit, 'preview_crop': preview_crop, 'type': resources_type},
                                 headers=self.headers)
         if response.status_code != 200:
@@ -163,7 +162,3 @@ class Disk(object):
         if response.status_code != 200:
             raise DiskException(response.json())
         return response.json()
-
-if __name__ == '__main__':
-    disk = Disk(token=TOKEN)
-    print(disk.get_info())
