@@ -75,7 +75,7 @@ class Disk(object):
             raise DiskException(response.json())
         return response.json()
 
-    def get_files(self, media_type, preview_size, sort, limit=20, preview_crop=False, offset=0):
+    def get_files(self, media_type=None, preview_size=None, sort=None, limit=20, preview_crop=False, offset=0):
         """Возвращает список файлов
         media_type принимает следующие значения:
             audio — аудио-файлы.
