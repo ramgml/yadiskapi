@@ -126,7 +126,7 @@ class Disk(object):
             raise DiskException(response.json())
         return response.json()
 
-    def get_public_resources(self, resources_type, preview_size, offset=0, limit=20, preview_crop=False, ):
+    def get_public_resources(self, resources_type=None, preview_size=None, offset=0, limit=20, preview_crop=False, ):
         """Возвращает список опубликованных ресурсов
         resources_type принимает следующие значения:
             file
