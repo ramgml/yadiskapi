@@ -155,9 +155,10 @@ class Disk(object):
             raise DiskException(response.json())
         return response.json()
 
-    def upload(self, path):
+    def upload(self, path, overwrite=False):
         """Получить ссылку для загрузки файла"""
-        response = requests.get(url='{}disk/resources/upload'.format(self.api_url), params={'path': path},
+        response = requests.get(url='{}disk/resources/upload'.format(self.api_url),
+                                params={'path': path, 'overwrite': overwrite},
                                 headers=self.headers)
         if response.status_code != 200:
             raise DiskException(response.json())

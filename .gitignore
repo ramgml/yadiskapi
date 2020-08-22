@@ -6,3 +6,4 @@ resp.html
 settings.py
 dist/
 yadiskapi.egg-info/
+.history
